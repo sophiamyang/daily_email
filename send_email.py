@@ -72,7 +72,7 @@ def send_email(recipient_email, subject, body, image_data=None, content_type=Non
 
 
 if __name__ == "__main__":
-    recipient_email = "sophiayang1211@gmail.com"
+    recipient_email = "test@test.com" #change to real email
     subject = "Test Email"
     body = "This is a test email sent from Python!"
     

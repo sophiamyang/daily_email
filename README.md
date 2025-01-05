@@ -1,4 +1,4 @@
-# Daily Positive Thoughts Email System
+# Daily Positive Thoughts Daily Emails
 
 I created this project because I wanted to receive personalized encouraging messages every day. Sometimes we all need a little positivity in our inbox! The system uses AI to generate uplifting messages.
 

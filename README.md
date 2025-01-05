@@ -19,6 +19,12 @@ If you'd also like to receive daily positive thoughts:
 3. You get a daily email with positive thoughts
 4. Unsubscribe anytime if you no longer want the messages
 
+## Minimalist tech stack
+📝 Intake: Google Form
+📊 Database: Google Sheet (yes, Google Sheet does wonders! Apparently you can [scale to millions with Google Sheets](shttps://www.levels.fyi/blog/scaling-to-millions-with-google-sheets.html))
+🤖 AI: Mistral AI
+⏱️ Scheduler: Github Actions
+
 ## Run It Yourself
 
 Want to set up your own version? Here's how:

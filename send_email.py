@@ -2,13 +2,14 @@ import smtplib
 import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
 
-def send_email(recipient_email, subject, body):
+def send_email(recipient_email, subject, body, image_data=None, content_type=None):
     """
     Send an email using Gmail SMTP server
     
@@ -16,6 +17,8 @@ def send_email(recipient_email, subject, body):
         recipient_email (str): Recipient's email address
         subject (str): Email subject
         body (str): Email body content
+        image_data (bytes, optional): Image data to embed
+        content_type (str, optional): Image content type
     """
     # Get credentials from environment variables
     sender_email = os.getenv('EMAIL_SENDER')
@@ -25,13 +28,29 @@ def send_email(recipient_email, subject, body):
         raise ValueError("Email credentials not found in environment variables")
 
     # Create message container
-    message = MIMEMultipart()
+    message = MIMEMultipart('related')
     message['From'] = sender_email
     message['To'] = recipient_email
     message['Subject'] = subject
 
-    # Add body to email
-    message.attach(MIMEText(body, 'plain'))
+    # Create HTML version of the body with embedded image
+    html_body = f"""
+    <html>
+        <body>
+            <p>{body.replace('\n', '<br>')}</p>
+            {f'<img src="cid:cat_image" style="max-width:500px;">' if image_data else ''}
+        </body>
+    </html>
+    """
+
+    # Attach HTML body
+    message.attach(MIMEText(html_body, 'html'))
+
+    # Attach image if provided
+    if image_data and content_type:
+        image = MIMEImage(image_data)
+        image.add_header('Content-ID', '<cat_image>')
+        message.attach(image)
 
     try:
         # Create SMTP session
@@ -57,4 +76,5 @@ if __name__ == "__main__":
     subject = "Test Email"
     body = "This is a test email sent from Python!"
     
-    send_email(recipient_email, subject, body) 
+    # Test without image
+    send_email(recipient_email, subject, body, None, None) 

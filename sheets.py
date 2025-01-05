@@ -3,6 +3,7 @@ import os
 from google.oauth2.service_account import Credentials
 from send_email import send_email
 from mistralai import Mistral
+import requests
 
 
 def open_spreadsheet(spreadsheet_name):
@@ -66,7 +67,6 @@ def get_recipients(worksheet):
             content = record.get("Would you like to tell me a little bit about yourself? ", '').strip()
             unsubscribed_value = record.get("Unsubscribe", "").strip()
             unsubscribed = unsubscribed_value.lower() == "yes"
-            print(content)
             
             # Only include if they have name, email and haven't unsubscribed
             if name and email and not unsubscribed:
@@ -151,12 +151,29 @@ def get_mistral_response(user_content):
         return None
 
 
+def get_random_cat_image():
+    """
+    Get a random cat image as bytes
+    
+    Returns:
+        tuple: (image_bytes, content_type) or (None, None) if failed
+    """
+    try:
+        response = requests.get('https://api.thecatapi.com/v1/images/search')
+        if response.status_code == 200:
+            image_url = response.json()[0]['url']
+            image_response = requests.get(image_url)
+            if image_response.status_code == 200:
+                content_type = image_response.headers['Content-Type']
+                return image_response.content, content_type
+    except Exception as e:
+        print(f"Error fetching cat image: {str(e)}")
+    return None, None
+
+
 def send_emails_to_recipients(recipients):
     """
     Send personalized emails to all recipients
-    
-    Parameters:
-        recipients: List of dictionaries containing recipient information
     """
     successful = 0
     failed = 0
@@ -165,6 +182,10 @@ def send_emails_to_recipients(recipients):
         name = recipient['name']
         email = recipient['email']
         user_content = recipient['content']
+        
+        # Get a random cat picture
+        image_data, content_type = get_random_cat_image()
+        cat_message = "\nHere's a cute cat to brighten your day!" if image_data else ""
         
         # Add unsubscribe note to the email
         unsubscribe_note = "\nP.S. If you'd like to unsubscribe from these emails, please reply with 'UNSUBSCRIBE'."
@@ -175,17 +196,18 @@ def send_emails_to_recipients(recipients):
             ai_response = "I appreciate you sharing your thoughts with me. Stay positive!"
 
         subject = f"Your Daily Encouragement, {name}"
-        body = f"""
-Dear {name},
+        body = f"""Dear {name},
 
 {ai_response}
 
 Wishing you a wonderful day ahead,
 Sophia
+
 {unsubscribe_note}
+{cat_message}
 """
         
-        if send_email(email, subject, body):
+        if send_email(email, subject, body, image_data, content_type):
             successful += 1
         else:
             failed += 1

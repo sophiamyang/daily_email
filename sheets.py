@@ -58,16 +58,14 @@ def get_recipients(worksheet):
         list: List of dictionaries containing recipient information
     """
     try:
-        # Get all records (assumes first row is headers)
         records = worksheet.get_all_records()
-        
-        # Extract names and emails
         recipients = []
         for record in records:
             name = record.get('What would you like to be called in the email? ', '').strip()
             email = record.get("What's your email address? ", '').strip()
             content = record.get("Tell me a little bit about yourself. What has been on your mind or bothering you? ", '').strip()
-            unsubscribed = record.get("Unsubscribed", "").strip().lower() == "yes"
+            unsubscribed_value = record.get("Unsubscribe", "").strip()
+            unsubscribed = unsubscribed_value.lower() == "yes"
             
             # Only include if they have name, email and haven't unsubscribed
             if name and email and not unsubscribed:
@@ -76,9 +74,6 @@ def get_recipients(worksheet):
                     'email': email,
                     'content': content
                 })
-            elif unsubscribed:
-                print(f"Skipping unsubscribed user: {email}")
-        
         return recipients
     
     except Exception as e:
@@ -185,10 +180,8 @@ Sophia
         
         if send_email(email, subject, body):
             successful += 1
-            print(f"✓ Email sent successfully to {name} ({email})")
         else:
             failed += 1
-            print(f"✗ Failed to send email to {name} ({email})")
     
     print(f"\nSummary: {successful} emails sent successfully, {failed} failed")
 
@@ -201,7 +194,6 @@ if __name__ == "__main__":
             recipients = get_recipients(worksheet)
             
             if recipients:
-                print(f"Found {len(recipients)} recipients")
                 send_emails_to_recipients(recipients)
             else:
                 print("No recipients found in the worksheet")

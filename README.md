@@ -2,6 +2,8 @@
 
 I created this project because I wanted to receive personalized encouraging messages every day. Sometimes we all need a little positivity in our inbox! The system uses AI to generate uplifting messages.
 
+![Demo Image](demo.png)
+
 ## Want to Join Me?
 
 If you'd also like to receive daily positive thoughts:
@@ -44,5 +46,7 @@ python sheets.py
 - `send_email.py`: Email sending functionality
 
 Feel free to fork and customize it for your own use! 💌
+
+
 
     

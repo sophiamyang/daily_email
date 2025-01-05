@@ -148,8 +148,8 @@ def get_mistral_response(user_content):
         response = client.chat.complete(
             model="mistral-small-latest",
             messages=messages,
-            temperature=0.7,
-            max_tokens=300
+            temperature=1,
+            max_tokens=350
         )
         
         return response.choices[0].message.content

@@ -21,7 +21,7 @@ If you'd also like to receive daily positive thoughts:
 
 ## Minimalist tech stack
 - 📝 Intake: Google Form
-- 📊 Database: Google Sheet (yes, Google Sheet does wonders! Apparently you can [scale to millions with Google Sheets](shttps://www.levels.fyi/blog/scaling-to-millions-with-google-sheets.html))
+- 📊 Database: Google Sheet (yes, Google Sheet does wonders! Apparently you can [scale to millions with Google Sheets](https://www.levels.fyi/blog/scaling-to-millions-with-google-sheets.html))
 - 🤖 AI: Mistral AI
 - ⏱️ Scheduler: Github Actions
 

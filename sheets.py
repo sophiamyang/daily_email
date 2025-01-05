@@ -63,9 +63,10 @@ def get_recipients(worksheet):
         for record in records:
             name = record.get('What would you like to be called in the email? ', '').strip()
             email = record.get("What's your email address? ", '').strip()
-            content = record.get("Would you like to tell me a little bit about yourself?  ", '').strip()
+            content = record.get("Would you like to tell me a little bit about yourself? ", '').strip()
             unsubscribed_value = record.get("Unsubscribe", "").strip()
             unsubscribed = unsubscribed_value.lower() == "yes"
+            print(content)
             
             # Only include if they have name, email and haven't unsubscribed
             if name and email and not unsubscribed:
@@ -100,33 +101,39 @@ def get_mistral_response(user_content):
     
     if not user_content:
         messages = [
-            {"role": "system", "content": """You are a compassionate and supportive friend. 
-            Generate a brief, uplifting general message for someone's day. Keep it warm, 
-            encouraging, and universal (1-2 paragraphs)."""},
+            {"role": "system", "content": """You are generating uplifting message content. 
+            Create a brief, encouraging message without any greeting or direct addressing. 
+            Keep it warm and universal (1-2 paragraphs)."""},
             
             {"role": "user", "content": """
-            Generate a positive, encouraging message that:
-            1. Offers general encouragement for the day ahead
+            Generate a positive message that:
+            1. Offers encouragement for the day ahead
             2. Includes a positive perspective on life
             3. Ends with an uplifting note
+            
+            Important: Do NOT include any greetings (like "Hello" or "Hi") or direct addressing.
+            Just start with the encouraging content directly.
             Keep it brief and warm.
             """}
         ]
     else:
         messages = [
-            {"role": "system", "content": """You are a compassionate and supportive friend. 
-            Your goal is to provide uplifting, encouraging messages that acknowledge the person's 
-            feelings while offering a positive perspective. Keep responses warm, personal, and concise 
-            (2-3 paragraphs maximum)."""},
+            {"role": "system", "content": """You are generating personalized encouraging content. 
+            Create a response that acknowledges feelings and offers support, without any greeting 
+            or direct addressing. Keep responses warm, personal, and concise (2-3 paragraphs)."""},
             
             {"role": "user", "content": f"""
-            Based on this person's sharing: "{user_content}"
+            Based on this sharing: "{user_content}"
             
-            Generate an uplifting, supportive response that:
-            1. Acknowledges their feelings
+            Generate a supportive response that:
+            1. Acknowledges the shared feelings
             2. Offers a positive perspective
             3. Provides gentle encouragement
             4. Ends with a hopeful note
+            
+            Important: Do NOT include any greetings or direct addressing.
+            The message will be part of an email that already has "Dear [Name]" at the start.
+            Just focus on the supportive content.
             """}
         ]
 

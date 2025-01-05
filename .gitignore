@@ -1,4 +1,10 @@
-# Byte-compiled / optimized / DLL files
+# Environment variables
+.env
+
+# Google Service Account
+*.json
+
+# Python
 __pycache__/
 *.py[cod]
 *$py.class

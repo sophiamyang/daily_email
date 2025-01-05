@@ -10,7 +10,7 @@ If you'd also like to receive daily positive thoughts:
 - Fill out this form: [Daily Positive Thoughts Signup](https://forms.gle/SzCf7zVF5KtvndNh6)
 - Get daily personalized messages
 
-**Note:** This is my fun side project - I'll keep it running as long as I can, but no guarantees! You can unsubscribe anytime by replying "UNSUBSCRIBE" to any email.
+**Note:** This is my fun side project - I'll keep it running as long as I can, but no guarantees! You can unsubscribe anytime by filling out [this form](https://forms.gle/DmuPozEkoVNA61VP7).
 
 ## How It Works
 

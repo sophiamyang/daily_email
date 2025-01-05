@@ -142,7 +142,7 @@ def get_mistral_response(user_content):
             model="mistral-small-latest",
             messages=messages,
             temperature=0.7,
-            max_tokens=500
+            max_tokens=250
         )
         
         return response.choices[0].message.content

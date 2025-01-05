@@ -101,40 +101,47 @@ def get_mistral_response(user_content):
     
     if not user_content:
         messages = [
-            {"role": "system", "content": """You are generating uplifting message content. 
-            Create a brief, encouraging message without any greeting or direct addressing. 
-            Keep it warm and universal (1-2 paragraphs)."""},
-            
-            {"role": "user", "content": """
-            Generate a positive message that:
-            1. Offers encouragement for the day ahead
-            2. Includes a positive perspective on life
-            3. Ends with an uplifting note
-            
-            Important: Do NOT include any greetings (like "Hello" or "Hi") or direct addressing.
-            Just start with the encouraging content directly.
-            Keep it brief and warm.
-            """}
+            {
+                "role": "system", 
+                "content": (
+                    "You are generating uplifting message content. "
+                    "Create a brief, encouraging message without greetings. "
+                    "Keep it warm and universal (1-2 paragraphs)."
+                )
+            },
+            {
+                "role": "user",
+                "content": (
+                    "Generate a positive message that:\n"
+                    "1. Offers encouragement for the day ahead\n"
+                    "2. Includes a positive perspective on life\n"
+                    "3. Ends with an uplifting note\n\n"
+                    "Important: No greetings. Start with content directly.\n"
+                    "Keep it brief and warm."
+                )
+            }
         ]
     else:
         messages = [
-            {"role": "system", "content": """You are generating personalized encouraging content. 
-            Create a response that acknowledges feelings and offers support, without any greeting 
-            or direct addressing. Keep responses warm, personal, and concise (2-3 paragraphs)."""},
-            
-            {"role": "user", "content": f"""
-            Based on this sharing: "{user_content}"
-            
-            Generate a supportive response that:
-            1. Acknowledges the shared feelings
-            2. Offers a positive perspective
-            3. Provides gentle encouragement
-            4. Ends with a hopeful note
-            
-            Important: Do NOT include any greetings or direct addressing.
-            The message will be part of an email that already has "Dear [Name]" at the start.
-            Just focus on the supportive content.
-            """}
+            {
+                "role": "system",
+                "content": (
+                    "You are generating personalized encouraging content. "
+                    "Create a response without greetings. Keep it warm and concise."
+                )
+            },
+            {
+                "role": "user",
+                "content": (
+                    f'Based on this sharing: "{user_content}"\n\n'
+                    "Generate a supportive response that:\n"
+                    "1. Acknowledges the shared feelings\n"
+                    "2. Offers a positive perspective\n"
+                    "3. Provides gentle encouragement\n"
+                    "4. Ends with a hopeful note\n\n"
+                    "Important: No greetings. Focus on supportive content."
+                )
+            }
         ]
 
     try:
@@ -172,9 +179,7 @@ def get_random_cat_image():
 
 
 def send_emails_to_recipients(recipients):
-    """
-    Send personalized emails to all recipients
-    """
+    """Send personalized emails to all recipients"""
     successful = 0
     failed = 0
 
@@ -183,17 +188,23 @@ def send_emails_to_recipients(recipients):
         email = recipient['email']
         user_content = recipient['content']
         
+        if email_exists_in_deletion_list(email):
+           # print(f"Email [REDACTED] is in deletion list. Skipping.")
+            continue
+        
         # Get a random cat picture
         image_data, content_type = get_random_cat_image()
         cat_message = "\nHere's a cute cat to brighten your day!" if image_data else ""
         
-        # Add unsubscribe note to the email
-        unsubscribe_note = "\nP.S. If you'd like to unsubscribe from these emails, please reply with 'UNSUBSCRIBE'."
+        # Use HTML formatting for the unsubscribe link
+        unsubscribe_note = (
+            "\nP.S. If you'd like to unsubscribe from these emails, "
+            'please fill out <a href="https://forms.gle/DmuPozEkoVNA61VP7">this form</a>.'
+        )
         
-        # Generate personalized message using Mistral
         ai_response = get_mistral_response(user_content)
         if not ai_response:
-            ai_response = "I appreciate you sharing your thoughts with me. Stay positive!"
+            ai_response = "Stay positive! Better days are ahead."
 
         subject = f"Your Daily Encouragement, {name}"
         body = f"""Dear {name},
@@ -209,10 +220,33 @@ Sophia
         
         if send_email(email, subject, body, image_data, content_type):
             successful += 1
+            print(f"✓ Email sent successfully to {name} [REDACTED]")
         else:
             failed += 1
+            print(f"✗ Failed to send email to {name} [REDACTED]")
     
     print(f"\nSummary: {successful} emails sent successfully, {failed} failed")
+
+
+def email_exists_in_deletion_list(email):
+    """Check if email is in deletion list"""
+    try:
+        sheet = open_spreadsheet('daily_email_deletion (Responses)')
+        if not sheet:
+            return False
+            
+        worksheet = sheet.worksheet("Form Responses 1")
+        # Get all records to find the email column
+        records = worksheet.get_all_records()
+        
+        # Extract emails from records
+        emails = [record.get("What's your email? ", "").strip() for record in records]
+        
+        return email in emails
+        
+    except Exception as e:
+        print(f"Error checking deletion list: {str(e)}")
+        return False
 
 
 if __name__ == "__main__":

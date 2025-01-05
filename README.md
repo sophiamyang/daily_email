@@ -1,27 +1,25 @@
 # Daily Positive Thoughts Email System
 
-An automated system that sends personalized encouraging emails using Google Forms/Sheets, Mistral AI, and Gmail. The goal is to brighten people's day with AI-generated positive messages tailored to their current situation.
+I created this project because I wanted to receive personalized encouraging messages every day. Sometimes we all need a little positivity in our inbox! The system uses AI to generate uplifting messages.
 
-## Want to Receive Daily Positive Thoughts?
+## Want to Join Me?
 
-Fill out this form to subscribe: [Daily Positive Thoughts Signup](https://forms.gle/SzCf7zVF5KtvndNh6)
+If you'd also like to receive daily positive thoughts:
+- Fill out this form: [Daily Positive Thoughts Signup](https://forms.gle/SzCf7zVF5KtvndNh6)
+- Get daily personalized messages
 
-**Note:** This is a demo project running for fun - no guarantee on how long the service will continue. Feel free to unsubscribe anytime by responding "UNSUBSCRIBE" to any email.
+**Note:** This is my fun side project - I'll keep it running as long as I can, but no guarantees! You can unsubscribe anytime by replying "UNSUBSCRIBE" to any email.
 
 ## How It Works
 
-1. You share what's on your mind through the Google Form
-2. The system uses Mistral AI to generate a personalized encouraging message
-3. You receive a daily email with positive thoughts related to your situation
-4. You can unsubscribe anytime
-
-## Technical Components
-
-- `sheets.py`: Main script that handles recipient management and email sending
-- `send_email.py`: Email sending functionality
-
+1. You tell me what's been on your mind through the Google Form
+2. The system uses Mistral AI to craft a personalized encouraging message
+3. You get a daily email with positive thoughts
+4. Unsubscribe anytime if you no longer want the messages
 
 ## Run It Yourself
+
+Want to set up your own version? Here's how:
 
 1. Install required packages:
 
@@ -39,5 +37,12 @@ pip install mistralai gspread google-auth python-dotenv
 ```bash
 python sheets.py
 ```
+
+## Technical Components
+
+- `sheets.py`: Main script for managing recipients and sending emails
+- `send_email.py`: Email sending functionality
+
+Feel free to fork and customize it for your own use! 💌
 
     

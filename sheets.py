@@ -63,7 +63,7 @@ def get_recipients(worksheet):
         for record in records:
             name = record.get('What would you like to be called in the email? ', '').strip()
             email = record.get("What's your email address? ", '').strip()
-            content = record.get("Tell me a little bit about yourself. What has been on your mind or bothering you? ", '').strip()
+            content = record.get("Would you like to tell me a little bit about yourself?  ", '').strip()
             unsubscribed_value = record.get("Unsubscribe", "").strip()
             unsubscribed = unsubscribed_value.lower() == "yes"
             
